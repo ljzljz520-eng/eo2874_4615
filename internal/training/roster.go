@@ -29,7 +29,9 @@ func (r *Roster) Remove(id string) {
 }
 func (r *Roster) Filter(group string, page, size int) []model.Athlete {
 	r.page, r.pageSize = page, size
-	// Intentional defect: current is not reset when changing age groups.
+	// Reset the current selection so switching age groups never mixes in
+	// members from a previous group.
+	r.current = r.current[:0]
 	for _, a := range r.all {
 		if a.AgeGroup == group && a.Active {
 			r.current = append(r.current, a)
